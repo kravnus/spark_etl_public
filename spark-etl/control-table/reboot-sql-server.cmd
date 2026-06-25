@@ -1,0 +1,1 @@
+spark-submit --driver-java-options "-Djava.security.manager=allow" --conf spark.executor.extraJavaOptions="-Djava.security.manager=allow" --packages com.microsoft.sqlserver:mssql-jdbc:12.6.1.jre11,com.mysql:mysql-connector-j:8.3.0 spark-update-control-table-sql-server.py

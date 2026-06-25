@@ -1,0 +1,252 @@
+//creation of all the control tables required.
+
+
+
+CREATE TABLE migration_control (
+    migration_id BIGINT PRIMARY KEY,
+    migration_name VARCHAR(200),
+    target_table VARCHAR(200),
+    load_type VARCHAR(20),           -- FULL / INCREMENTAL
+    watermark_column VARCHAR(200),
+    last_successful_load DATETIME,
+    write_mode VARCHAR(20),          -- append / overwrite
+    enabled BOOLEAN
+);
+
+
+CREATE TABLE migration_source_tables (
+    migration_id BIGINT,
+    table_alias VARCHAR(50),
+    source_schema VARCHAR(100),
+    source_table VARCHAR(200),
+    join_order INT
+);
+
+CREATE TABLE migration_joins (
+    migration_id BIGINT,
+    left_alias VARCHAR(50),
+    right_alias VARCHAR(50),
+    join_type VARCHAR(20),
+    join_condition VARCHAR(1000)
+);
+
+CREATE TABLE migration_column_mapping (
+    migration_id BIGINT,
+    source_expression VARCHAR(1000),
+    target_column VARCHAR(200),
+    transformation_expression VARCHAR(2000),
+    sequence_no INT
+);
+
+
+-- =====================================================
+-- migration_control
+-- =====================================================
+
+INSERT INTO migration_control
+(
+    migration_id,
+    migration_name,
+    target_table,
+    load_type,
+    watermark_column,
+    last_successful_load,
+    write_mode,
+    enabled
+)
+VALUES
+(
+    1,
+    'Customer Profile Migration',
+    'customer_profile',
+    'INCREMENTAL',
+    'c.updated_date',
+    NULL,
+    'append',
+    TRUE
+);
+
+
+-- =====================================================
+-- migration_source_tables
+-- =====================================================
+
+INSERT INTO migration_source_tables
+(
+    migration_id,
+    table_alias,
+    source_schema,
+    source_table,
+    join_order
+)
+VALUES
+(
+    1,
+    'c',
+    'dbo',
+    'customer',
+    1
+);
+
+INSERT INTO migration_source_tables
+(
+    migration_id,
+    table_alias,
+    source_schema,
+    source_table,
+    join_order
+)
+VALUES
+(
+    1,
+    'a',
+    'dbo',
+    'account',
+    2
+);
+
+INSERT INTO migration_source_tables
+(
+    migration_id,
+    table_alias,
+    source_schema,
+    source_table,
+    join_order
+)
+VALUES
+(
+    1,
+    'ad',
+    'dbo',
+    'address',
+    3
+);
+
+
+-- =====================================================
+-- migration_joins
+-- =====================================================
+
+INSERT INTO migration_joins
+(
+    migration_id,
+    left_alias,
+    right_alias,
+    join_type,
+    join_condition
+)
+VALUES
+(
+    1,
+    'c',
+    'a',
+    'LEFT',
+    'c.customer_id = a.customer_id'
+);
+
+INSERT INTO migration_joins
+(
+    migration_id,
+    left_alias,
+    right_alias,
+    join_type,
+    join_condition
+)
+VALUES
+(
+    1,
+    'c',
+    'ad',
+    'LEFT',
+    'c.customer_id = ad.customer_id'
+);
+
+
+-- =====================================================
+-- migration_column_mapping
+-- =====================================================
+
+INSERT INTO migration_column_mapping
+(
+    migration_id,
+    source_expression,
+    target_column,
+    transformation_expression,
+    sequence_no
+)
+VALUES
+(
+    1,
+    'c.customer_id',
+    'cust_id',
+    NULL,
+    1
+);
+
+INSERT INTO migration_column_mapping
+(
+    migration_id,
+    source_expression,
+    target_column,
+    transformation_expression,
+    sequence_no
+)
+VALUES
+(
+    1,
+    'c.customer_name',
+    'cust_name',
+    'UPPER(c.customer_name)',
+    2
+);
+
+INSERT INTO migration_column_mapping
+(
+    migration_id,
+    source_expression,
+    target_column,
+    transformation_expression,
+    sequence_no
+)
+VALUES
+(
+    1,
+    'a.account_no',
+    'account_no',
+    NULL,
+    3
+);
+
+INSERT INTO migration_column_mapping
+(
+    migration_id,
+    source_expression,
+    target_column,
+    transformation_expression,
+    sequence_no
+)
+VALUES
+(
+    1,
+    'ad.city',
+    'city',
+    NULL,
+    4
+);
+
+INSERT INTO migration_column_mapping
+(
+    migration_id,
+    source_expression,
+    target_column,
+    transformation_expression,
+    sequence_no
+)
+VALUES
+(
+    1,
+    NULL,
+    'migration_ts',
+    'current_timestamp()',
+    5
+);

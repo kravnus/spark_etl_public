@@ -1,0 +1,233 @@
+WARNING: Using incubator modules: jdk.incubator.vector
+:: loading settings :: url = jar:file:/C:/mywork/spark-4.1.2-bin-hadoop3/spark-4.1.2-bin-hadoop3/jars/ivy-2.5.3.jar!/org/apache/ivy/core/settings/ivysettings.xml
+Ivy Default Cache set to: C:\Users\tess_\.ivy2.5.2\cache
+The jars for the packages stored in: C:\Users\tess_\.ivy2.5.2\jars
+org.postgresql#postgresql added as a dependency
+com.mysql#mysql-connector-j added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-00b43168-413b-448d-9e20-f6f4dcd3e8a0;1.0
+	confs: [default]
+	found org.postgresql#postgresql;42.7.2 in central
+	found org.checkerframework#checker-qual;3.42.0 in central
+	found com.mysql#mysql-connector-j;8.3.0 in central
+	found com.google.protobuf#protobuf-java;3.25.1 in central
+:: resolution report :: resolve 329ms :: artifacts dl 19ms
+	:: modules in use:
+	com.google.protobuf#protobuf-java;3.25.1 from central in [default]
+	com.mysql#mysql-connector-j;8.3.0 from central in [default]
+	org.checkerframework#checker-qual;3.42.0 from central in [default]
+	org.postgresql#postgresql;42.7.2 from central in [default]
+	---------------------------------------------------------------------
+	|                  |            modules            ||   artifacts   |
+	|       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+	---------------------------------------------------------------------
+	|      default     |   4   |   0   |   0   |   0   ||   4   |   0   |
+	---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-00b43168-413b-448d-9e20-f6f4dcd3e8a0
+	confs: [default]
+	0 artifacts copied, 4 already retrieved (0kB/14ms)
+26/06/22 23:42:57 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+26/06/22 23:43:00 INFO SparkContext: Running Spark version 4.1.2
+26/06/22 23:43:00 INFO SparkContext: OS info Windows 11, 10.0, amd64
+26/06/22 23:43:00 INFO SparkContext: Java version 23.0.2+7-58
+26/06/22 23:43:00 INFO ResourceUtils: ==============================================================
+26/06/22 23:43:00 INFO ResourceUtils: No custom resources configured for spark.driver.
+26/06/22 23:43:00 INFO ResourceUtils: ==============================================================
+26/06/22 23:43:00 INFO SparkContext: Submitted application: DatabaseToDatabaseETL
+26/06/22 23:43:00 INFO SecurityManager: Changing view acls to: tess_
+26/06/22 23:43:00 INFO SecurityManager: Changing modify acls to: tess_
+26/06/22 23:43:00 INFO SecurityManager: Changing view acls groups to: tess_
+26/06/22 23:43:00 INFO SecurityManager: Changing modify acls groups to: tess_
+26/06/22 23:43:00 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: tess_ groups with view permissions: EMPTY; users with modify permissions: tess_; groups with modify permissions: EMPTY; RPC SSL disabled
+26/06/22 23:43:01 INFO Utils: Successfully started service 'sparkDriver' on port 58131.
+26/06/22 23:43:01 INFO SparkEnv: Registering MapOutputTracker
+26/06/22 23:43:01 INFO SparkEnv: Registering BlockManagerMaster
+26/06/22 23:43:01 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+26/06/22 23:43:01 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+26/06/22 23:43:01 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+26/06/22 23:43:01 INFO DiskBlockManager: Created local directory at C:\Users\tess_\AppData\Local\Temp\blockmgr-cf66b08b-7767-40cb-abb4-d12c9bb8a849
+26/06/22 23:43:01 INFO SparkEnv: Registering OutputCommitCoordinator
+26/06/22 23:43:01 INFO JettyUtils: Start Jetty 0.0.0.0:4040 for SparkUI
+26/06/22 23:43:01 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+26/06/22 23:43:01 INFO SparkContext: Added JAR file:///C:/Users/tess_/.ivy2.5.2/jars/org.postgresql_postgresql-42.7.2.jar at spark://DESKTOP-CG2NMND:58131/jars/org.postgresql_postgresql-42.7.2.jar with timestamp 1782142980153
+26/06/22 23:43:01 INFO SparkContext: Added JAR file:///C:/Users/tess_/.ivy2.5.2/jars/com.mysql_mysql-connector-j-8.3.0.jar at spark://DESKTOP-CG2NMND:58131/jars/com.mysql_mysql-connector-j-8.3.0.jar with timestamp 1782142980153
+26/06/22 23:43:01 INFO SparkContext: Added JAR file:///C:/Users/tess_/.ivy2.5.2/jars/org.checkerframework_checker-qual-3.42.0.jar at spark://DESKTOP-CG2NMND:58131/jars/org.checkerframework_checker-qual-3.42.0.jar with timestamp 1782142980153
+26/06/22 23:43:01 INFO SparkContext: Added JAR file:///C:/Users/tess_/.ivy2.5.2/jars/com.google.protobuf_protobuf-java-3.25.1.jar at spark://DESKTOP-CG2NMND:58131/jars/com.google.protobuf_protobuf-java-3.25.1.jar with timestamp 1782142980153
+26/06/22 23:43:01 INFO SparkContext: Added file file:///C:/Users/tess_/.ivy2.5.2/jars/org.postgresql_postgresql-42.7.2.jar at file:///C:/Users/tess_/.ivy2.5.2/jars/org.postgresql_postgresql-42.7.2.jar with timestamp 1782142980153
+26/06/22 23:43:01 INFO Utils: Copying C:\Users\tess_\.ivy2.5.2\jars\org.postgresql_postgresql-42.7.2.jar to C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\org.postgresql_postgresql-42.7.2.jar
+26/06/22 23:43:01 INFO SparkContext: Added file file:///C:/Users/tess_/.ivy2.5.2/jars/com.mysql_mysql-connector-j-8.3.0.jar at file:///C:/Users/tess_/.ivy2.5.2/jars/com.mysql_mysql-connector-j-8.3.0.jar with timestamp 1782142980153
+26/06/22 23:43:01 INFO Utils: Copying C:\Users\tess_\.ivy2.5.2\jars\com.mysql_mysql-connector-j-8.3.0.jar to C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\com.mysql_mysql-connector-j-8.3.0.jar
+26/06/22 23:43:01 INFO SparkContext: Added file file:///C:/Users/tess_/.ivy2.5.2/jars/org.checkerframework_checker-qual-3.42.0.jar at file:///C:/Users/tess_/.ivy2.5.2/jars/org.checkerframework_checker-qual-3.42.0.jar with timestamp 1782142980153
+26/06/22 23:43:01 INFO Utils: Copying C:\Users\tess_\.ivy2.5.2\jars\org.checkerframework_checker-qual-3.42.0.jar to C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\org.checkerframework_checker-qual-3.42.0.jar
+26/06/22 23:43:02 INFO SparkContext: Added file file:///C:/Users/tess_/.ivy2.5.2/jars/com.google.protobuf_protobuf-java-3.25.1.jar at file:///C:/Users/tess_/.ivy2.5.2/jars/com.google.protobuf_protobuf-java-3.25.1.jar with timestamp 1782142980153
+26/06/22 23:43:02 INFO Utils: Copying C:\Users\tess_\.ivy2.5.2\jars\com.google.protobuf_protobuf-java-3.25.1.jar to C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\com.google.protobuf_protobuf-java-3.25.1.jar
+26/06/22 23:43:02 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(cores -> name: cores, amount: 1, script: , vendor: , memory -> name: memory, amount: 1024, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+26/06/22 23:43:02 INFO ResourceProfile: Limiting resource is cpu
+26/06/22 23:43:02 INFO ResourceProfileManager: Added ResourceProfile id: 0
+26/06/22 23:43:02 INFO SecurityManager: Changing view acls to: tess_
+26/06/22 23:43:02 INFO SecurityManager: Changing modify acls to: tess_
+26/06/22 23:43:02 INFO SecurityManager: Changing view acls groups to: tess_
+26/06/22 23:43:02 INFO SecurityManager: Changing modify acls groups to: tess_
+26/06/22 23:43:02 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: tess_ groups with view permissions: EMPTY; users with modify permissions: tess_; groups with modify permissions: EMPTY; RPC SSL disabled
+26/06/22 23:43:02 INFO Executor: Starting executor ID driver on host DESKTOP-CG2NMND
+26/06/22 23:43:02 INFO Executor: OS info Windows 11, 10.0, amd64
+26/06/22 23:43:02 INFO Executor: Java version 23.0.2+7-58
+26/06/22 23:43:02 INFO Executor: Starting executor with user classpath (userClassPathFirst = false): ''
+26/06/22 23:43:02 INFO Executor: Created or updated repl class loader org.apache.spark.util.MutableURLClassLoader@644d47dd for default.
+26/06/22 23:43:02 INFO Executor: Fetching file:///C:/Users/tess_/.ivy2.5.2/jars/org.checkerframework_checker-qual-3.42.0.jar with timestamp 1782142980153
+26/06/22 23:43:02 INFO Utils: C:\Users\tess_\.ivy2.5.2\jars\org.checkerframework_checker-qual-3.42.0.jar has been previously copied to C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\org.checkerframework_checker-qual-3.42.0.jar
+26/06/22 23:43:02 INFO Executor: Fetching file:///C:/Users/tess_/.ivy2.5.2/jars/com.google.protobuf_protobuf-java-3.25.1.jar with timestamp 1782142980153
+26/06/22 23:43:02 INFO Utils: C:\Users\tess_\.ivy2.5.2\jars\com.google.protobuf_protobuf-java-3.25.1.jar has been previously copied to C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\com.google.protobuf_protobuf-java-3.25.1.jar
+26/06/22 23:43:02 INFO Executor: Fetching file:///C:/Users/tess_/.ivy2.5.2/jars/com.mysql_mysql-connector-j-8.3.0.jar with timestamp 1782142980153
+26/06/22 23:43:02 INFO Utils: C:\Users\tess_\.ivy2.5.2\jars\com.mysql_mysql-connector-j-8.3.0.jar has been previously copied to C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\com.mysql_mysql-connector-j-8.3.0.jar
+26/06/22 23:43:02 INFO Executor: Fetching file:///C:/Users/tess_/.ivy2.5.2/jars/org.postgresql_postgresql-42.7.2.jar with timestamp 1782142980153
+26/06/22 23:43:02 INFO Utils: C:\Users\tess_\.ivy2.5.2\jars\org.postgresql_postgresql-42.7.2.jar has been previously copied to C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\org.postgresql_postgresql-42.7.2.jar
+26/06/22 23:43:03 INFO Executor: Fetching spark://DESKTOP-CG2NMND:58131/jars/org.checkerframework_checker-qual-3.42.0.jar with timestamp 1782142980153
+26/06/22 23:43:03 INFO TransportClientFactory: Successfully created connection to DESKTOP-CG2NMND/172.20.10.171:58131 after 45 ms (0 ms spent in bootstraps)
+26/06/22 23:43:03 INFO Utils: Fetching spark://DESKTOP-CG2NMND:58131/jars/org.checkerframework_checker-qual-3.42.0.jar to C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\fetchFileTemp15595111244038128438.tmp
+26/06/22 23:43:03 INFO Utils: C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\fetchFileTemp15595111244038128438.tmp has been previously copied to C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\org.checkerframework_checker-qual-3.42.0.jar
+26/06/22 23:43:03 INFO Executor: Adding file:/C:/Users/tess_/AppData/Local/Temp/spark-c6607b55-ad84-4682-8439-73c28d8e16a1/userFiles-28ccf641-1251-4e48-9aec-48dca12471ea/org.checkerframework_checker-qual-3.42.0.jar to class loader default
+26/06/22 23:43:03 INFO Executor: Fetching spark://DESKTOP-CG2NMND:58131/jars/org.postgresql_postgresql-42.7.2.jar with timestamp 1782142980153
+26/06/22 23:43:03 INFO Utils: Fetching spark://DESKTOP-CG2NMND:58131/jars/org.postgresql_postgresql-42.7.2.jar to C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\fetchFileTemp13762497534526533898.tmp
+26/06/22 23:43:03 INFO Utils: C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\fetchFileTemp13762497534526533898.tmp has been previously copied to C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\org.postgresql_postgresql-42.7.2.jar
+26/06/22 23:43:03 INFO Executor: Adding file:/C:/Users/tess_/AppData/Local/Temp/spark-c6607b55-ad84-4682-8439-73c28d8e16a1/userFiles-28ccf641-1251-4e48-9aec-48dca12471ea/org.postgresql_postgresql-42.7.2.jar to class loader default
+26/06/22 23:43:03 INFO Executor: Fetching spark://DESKTOP-CG2NMND:58131/jars/com.google.protobuf_protobuf-java-3.25.1.jar with timestamp 1782142980153
+26/06/22 23:43:03 INFO Utils: Fetching spark://DESKTOP-CG2NMND:58131/jars/com.google.protobuf_protobuf-java-3.25.1.jar to C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\fetchFileTemp18190950150781522835.tmp
+26/06/22 23:43:03 INFO Utils: C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\fetchFileTemp18190950150781522835.tmp has been previously copied to C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\com.google.protobuf_protobuf-java-3.25.1.jar
+26/06/22 23:43:03 INFO Executor: Adding file:/C:/Users/tess_/AppData/Local/Temp/spark-c6607b55-ad84-4682-8439-73c28d8e16a1/userFiles-28ccf641-1251-4e48-9aec-48dca12471ea/com.google.protobuf_protobuf-java-3.25.1.jar to class loader default
+26/06/22 23:43:03 INFO Executor: Fetching spark://DESKTOP-CG2NMND:58131/jars/com.mysql_mysql-connector-j-8.3.0.jar with timestamp 1782142980153
+26/06/22 23:43:03 INFO Utils: Fetching spark://DESKTOP-CG2NMND:58131/jars/com.mysql_mysql-connector-j-8.3.0.jar to C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\fetchFileTemp10035281891870457591.tmp
+26/06/22 23:43:03 INFO Utils: C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\fetchFileTemp10035281891870457591.tmp has been previously copied to C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\com.mysql_mysql-connector-j-8.3.0.jar
+26/06/22 23:43:03 INFO Executor: Adding file:/C:/Users/tess_/AppData/Local/Temp/spark-c6607b55-ad84-4682-8439-73c28d8e16a1/userFiles-28ccf641-1251-4e48-9aec-48dca12471ea/com.mysql_mysql-connector-j-8.3.0.jar to class loader default
+26/06/22 23:43:03 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 58142.
+26/06/22 23:43:03 INFO NettyBlockTransferService: Server created on DESKTOP-CG2NMND:58142
+26/06/22 23:43:03 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+26/06/22 23:43:03 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, DESKTOP-CG2NMND, 58142, None)
+26/06/22 23:43:03 INFO BlockManagerMasterEndpoint: Registering block manager DESKTOP-CG2NMND:58142 with 434.4 MiB RAM, BlockManagerId(driver, DESKTOP-CG2NMND, 58142, None)
+26/06/22 23:43:03 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, DESKTOP-CG2NMND, 58142, None)
+26/06/22 23:43:03 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, DESKTOP-CG2NMND, 58142, None)
+26/06/22 23:43:08 INFO SharedState: Setting hive.metastore.warehouse.dir ('null') to the value of spark.sql.warehouse.dir.
+26/06/22 23:43:08 INFO SharedState: Warehouse path is 'file:/C:/mywork/spark/spark-etl/main/spark-warehouse'.
+26/06/22 23:43:09 INFO JDBCRDD: Generated JDBC query to get scan output schema: SELECT * FROM source_warehouse.raw_customer WHERE 1=0
+26/06/22 23:43:12 INFO JDBCDatabaseMetadata: closed connection during metadata fetch
+26/06/22 23:43:13 INFO CodeGenerator: Code generated in 490.612 ms
+26/06/22 23:43:14 INFO SparkContext: Starting job: jdbc at DirectMethodHandleAccessor.java:103
+26/06/22 23:43:14 INFO DAGScheduler: Got job 0 (jdbc at DirectMethodHandleAccessor.java:103) with 1 output partitions
+26/06/22 23:43:14 INFO DAGScheduler: Final stage: ResultStage 0 (jdbc at DirectMethodHandleAccessor.java:103)
+26/06/22 23:43:14 INFO DAGScheduler: Parents of final stage: List()
+26/06/22 23:43:14 INFO DAGScheduler: Missing parents: List()
+26/06/22 23:43:14 INFO DAGScheduler: Missing parents found for ResultStage 0: List()
+26/06/22 23:43:14 INFO DAGScheduler: Submitting ResultStage 0 (MapPartitionsRDD[4] at jdbc at DirectMethodHandleAccessor.java:103), which has no missing parents
+26/06/22 23:43:14 INFO MemoryStore: MemoryStore started with capacity 434.4 MiB
+26/06/22 23:43:14 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 32.1 KiB, free 434.4 MiB)
+26/06/22 23:43:14 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 14.0 KiB, free 434.4 MiB)
+26/06/22 23:43:14 INFO SparkContext: Created broadcast 0 from broadcast at DAGScheduler.scala:1686
+26/06/22 23:43:14 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 0 (MapPartitionsRDD[4] at jdbc at DirectMethodHandleAccessor.java:103) (first 15 tasks are for partitions Vector(0))
+26/06/22 23:43:14 INFO TaskSchedulerImpl: Adding task set 0.0 with 1 tasks resource profile 0
+26/06/22 23:43:14 INFO TaskSetManager: Starting task 0.0 in stage 0.0 (TID 0) (DESKTOP-CG2NMND,executor driver, partition 0, PROCESS_LOCAL, 10712 bytes) 
+26/06/22 23:43:14 INFO Executor: Running task 0.0 in stage 0.0 (TID 0)
+26/06/22 23:43:14 INFO JDBCRDD: Generated JDBC query to fetch data: SELECT "customer_id","first_name","last_name","email","created_at" FROM source_warehouse.raw_customer  WHERE ("email" IS NOT NULL) AND ("email" LIKE '%@%' ESCAPE '\')    
+26/06/22 23:43:14 INFO CodeGenerator: Code generated in 35.2729 ms
+26/06/22 23:43:15 INFO CodeGenerator: Code generated in 60.6354 ms
+26/06/22 23:43:17 INFO JDBCRDD: closed connection
+26/06/22 23:43:17 INFO Executor: Finished task 0.0 in stage 0.0 (TID 0). 1694 bytes result sent to driver
+26/06/22 23:43:17 INFO TaskSetManager: Finished task 0.0 in stage 0.0 (TID 0) in 2989 ms on DESKTOP-CG2NMND (executor driver) (1/1)
+26/06/22 23:43:17 INFO TaskSchedulerImpl: Removed TaskSet 0.0 whose tasks have all completed, from pool 
+26/06/22 23:43:17 INFO DAGScheduler: ResultStage 0 (jdbc at DirectMethodHandleAccessor.java:103) finished in 3426 ms
+26/06/22 23:43:17 INFO DAGScheduler: Job 0 is finished. Cancelling potential speculative or zombie tasks for this job
+26/06/22 23:43:17 INFO TaskSchedulerImpl: Canceling stage 0
+26/06/22 23:43:17 INFO TaskSchedulerImpl: Killing all running tasks in stage 0: Stage finished
+26/06/22 23:43:17 INFO DAGScheduler: Job 0 finished: jdbc at DirectMethodHandleAccessor.java:103, took 3519.1139 ms
+26/06/22 23:43:17 INFO JDBCRDD: Generated JDBC query to get scan output schema: SELECT * FROM clean_transactions WHERE 1=0
+26/06/22 23:43:17 INFO SparkContext: SparkContext is stopping with exitCode 0 from stop at DirectMethodHandleAccessor.java:103.
+26/06/22 23:43:17 INFO SparkUI: Stopped Spark web UI at http://DESKTOP-CG2NMND:4040
+26/06/22 23:43:17 INFO MapOutputTrackerMasterEndpoint: MapOutputTrackerMasterEndpoint stopped!
+26/06/22 23:43:17 INFO MemoryStore: MemoryStore cleared
+26/06/22 23:43:17 INFO BlockManager: BlockManager stopped
+26/06/22 23:43:17 INFO BlockManagerMaster: BlockManagerMaster stopped
+26/06/22 23:43:17 INFO OutputCommitCoordinator$OutputCommitCoordinatorEndpoint: OutputCommitCoordinator stopped!
+26/06/22 23:43:17 WARN SparkEnv: Exception while deleting Spark temp dir: C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea
+java.io.IOException: Failed to delete: C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\org.postgresql_postgresql-42.7.2.jar
+	at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:308)
+	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+	at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:291)
+	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:248)
+	at org.apache.spark.util.SparkFileUtils.deleteRecursively(SparkFileUtils.scala:158)
+	at org.apache.spark.util.SparkFileUtils.deleteRecursively$(SparkFileUtils.scala:157)
+	at org.apache.spark.util.Utils$.deleteRecursively(Utils.scala:1062)
+	at org.apache.spark.SparkEnv.stop(SparkEnv.scala:131)
+	at org.apache.spark.SparkContext.$anonfun$stop$25(SparkContext.scala:2406)
+	at org.apache.spark.util.Utils$.tryLogNonFatalError(Utils.scala:1314)
+	at org.apache.spark.SparkContext.stop(SparkContext.scala:2406)
+	at org.apache.spark.SparkContext.stop(SparkContext.scala:2308)
+	at org.apache.spark.api.java.JavaSparkContext.stop(JavaSparkContext.scala:552)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
+	at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
+	at py4j.Gateway.invoke(Gateway.java:282)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:184)
+	at py4j.ClientServerConnection.run(ClientServerConnection.java:108)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+26/06/22 23:43:17 INFO SparkContext: Successfully stopped SparkContext (Uptime: 17704 ms)
+26/06/22 23:43:18 ERROR ShutdownHookManager: Exception while deleting Spark temp dir: C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1
+java.io.IOException: Failed to delete: C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\org.postgresql_postgresql-42.7.2.jar
+	at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:308)
+	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+	at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:291)
+	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+	at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:291)
+	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:248)
+	at org.apache.spark.util.SparkFileUtils.deleteRecursively(SparkFileUtils.scala:158)
+	at org.apache.spark.util.SparkFileUtils.deleteRecursively$(SparkFileUtils.scala:157)
+	at org.apache.spark.util.Utils$.deleteRecursively(Utils.scala:1062)
+	at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$4(ShutdownHookManager.scala:70)
+	at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$4$adapted(ShutdownHookManager.scala:67)
+	at scala.collection.ArrayOps$.foreach$extension(ArrayOps.scala:1324)
+	at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$2(ShutdownHookManager.scala:67)
+	at org.apache.spark.util.SparkShutdownHook.run(ShutdownHookManager.scala:231)
+	at org.apache.spark.util.SparkShutdownHookManager.$anonfun$runAll$2(ShutdownHookManager.scala:205)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+	at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+	at org.apache.spark.util.SparkShutdownHookManager.$anonfun$runAll$1(ShutdownHookManager.scala:205)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+	at scala.util.Try$.apply(Try.scala:217)
+	at org.apache.spark.util.SparkShutdownHookManager.runAll(ShutdownHookManager.scala:205)
+	at org.apache.spark.util.SparkShutdownHookManager$$anon$2.run(ShutdownHookManager.scala:184)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
+26/06/22 23:43:18 ERROR ShutdownHookManager: Exception while deleting Spark temp dir: C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea
+java.io.IOException: Failed to delete: C:\Users\tess_\AppData\Local\Temp\spark-c6607b55-ad84-4682-8439-73c28d8e16a1\userFiles-28ccf641-1251-4e48-9aec-48dca12471ea\org.postgresql_postgresql-42.7.2.jar
+	at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:308)
+	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+	at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:291)
+	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+	at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:248)
+	at org.apache.spark.util.SparkFileUtils.deleteRecursively(SparkFileUtils.scala:158)
+	at org.apache.spark.util.SparkFileUtils.deleteRecursively$(SparkFileUtils.scala:157)
+	at org.apache.spark.util.Utils$.deleteRecursively(Utils.scala:1062)
+	at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$4(ShutdownHookManager.scala:70)
+	at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$4$adapted(ShutdownHookManager.scala:67)
+	at scala.collection.ArrayOps$.foreach$extension(ArrayOps.scala:1324)
+	at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$2(ShutdownHookManager.scala:67)
+	at org.apache.spark.util.SparkShutdownHook.run(ShutdownHookManager.scala:231)
+	at org.apache.spark.util.SparkShutdownHookManager.$anonfun$runAll$2(ShutdownHookManager.scala:205)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+	at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+	at org.apache.spark.util.SparkShutdownHookManager.$anonfun$runAll$1(ShutdownHookManager.scala:205)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+	at scala.util.Try$.apply(Try.scala:217)
+	at org.apache.spark.util.SparkShutdownHookManager.runAll(ShutdownHookManager.scala:205)
+	at org.apache.spark.util.SparkShutdownHookManager$$anon$2.run(ShutdownHookManager.scala:184)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1575)
