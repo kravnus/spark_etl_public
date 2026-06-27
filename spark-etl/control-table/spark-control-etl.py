@@ -27,6 +27,16 @@ src_properties = {
     "driver": "org.postgresql.Driver"
 }
 
+# Define connection properties
+sql_common_url = "jdbc:sqlserver://localhost:1433;databaseName=mStudioCommon;encrypt=true;trustServerCertificate=true;"
+src_common_properties = {
+    "user": "sa",
+    "password": "StrongP@ssword",
+    "driver":"com.microsoft.sqlserver.jdbc.SQLServerDriver"
+}
+
+
+
 # ----------------------------------------------------
 # 3. WRITE (Write data to target Database - MYSQL)
 # ----------------------------------------------------
@@ -45,7 +55,15 @@ def main():
     print(">>> Extracting data from PostgreSQL source table...")
     # Load raw data from a source table into a Spark DataFrame
     raw_users_df = load_source_table("source_warehouse", "raw_customer");
-    raw_users_df.show()
+#    raw_users_df.show()
+
+
+    # print(">>> Extracting data from sql server source table...")
+    # Load raw data from a source table into a Spark DataFrame
+    # raw_users_df = load_sql_source_table("dbo", "banks");
+    # raw_users_df.show()
+
+    # exit()
 
     print("Display all the control tables.")
 
@@ -104,12 +122,16 @@ def main():
             # ----------------------------------------------------
             # Define connection properties for the target database
 
-            df = load_source_table(
+            df = load_sql_source_table(
                 src["source_schema"],
                 src["source_table"]
             )
 
             source_dfs[alias] = df
+            df = df.filter(df['deleted'] == False)
+            df.show()
+            
+            
 
         root_alias = sources[0]["table_alias"]
         result_df = source_dfs[root_alias].alias(root_alias)
@@ -177,7 +199,8 @@ def main():
 
         print("final_df")
         final_df.show()
-
+        print(target_url)
+        print(target_table)
         final_df.write \
                 .jdbc(
                     url=target_url,
@@ -214,6 +237,13 @@ def load_source_table(schema_name, table_name):
         url=src_url,
         table=f"{schema_name}.{table_name}",
         properties=src_properties
+    )
+
+def load_sql_source_table(schema_name, table_name):
+    return spark.read.jdbc(
+        url=sql_common_url,
+        table=f"{schema_name}.{table_name}",
+        properties=src_common_properties
     )
 
 

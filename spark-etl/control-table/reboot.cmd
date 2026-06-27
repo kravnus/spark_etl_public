@@ -1,1 +1,1 @@
-spark-submit --driver-java-options "-Djava.security.manager=allow" --conf spark.executor.extraJavaOptions="-Djava.security.manager=allow" --packages org.postgresql:postgresql:42.7.2,com.mysql:mysql-connector-j:8.3.0 spark-control-etl.py
+spark-submit --driver-java-options "-Djava.security.manager=allow" --conf spark.executor.extraJavaOptions="-Djava.security.manager=allow" --packages com.microsoft.sqlserver:mssql-jdbc:12.6.1.jre11,org.postgresql:postgresql:42.7.2,com.mysql:mysql-connector-j:8.3.0 spark-control-etl.py
