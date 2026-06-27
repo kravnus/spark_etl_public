@@ -1,0 +1,47 @@
+-- target_analytics.migration_column_mapping definition
+
+CREATE TABLE `migration_column_mapping` (
+  `migration_id` bigint DEFAULT NULL,
+  `source_expression` varchar(1000) DEFAULT NULL,
+  `target_column` varchar(200) DEFAULT NULL,
+  `transformation_expression` varchar(2000) DEFAULT NULL,
+  `sequence_no` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- target_analytics.migration_control definition
+
+CREATE TABLE `migration_control` (
+  `migration_id` bigint NOT NULL,
+  `migration_name` varchar(200) DEFAULT NULL,
+  `target_table` varchar(200) DEFAULT NULL,
+  `load_type` varchar(20) DEFAULT NULL,
+  `watermark_column` varchar(200) DEFAULT NULL,
+  `last_successful_load` datetime DEFAULT NULL,
+  `write_mode` varchar(20) DEFAULT NULL,
+  `enabled` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`migration_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- target_analytics.migration_joins definition
+
+CREATE TABLE `migration_joins` (
+  `migration_id` bigint DEFAULT NULL,
+  `left_alias` varchar(50) DEFAULT NULL,
+  `right_alias` varchar(50) DEFAULT NULL,
+  `join_type` varchar(20) DEFAULT NULL,
+  `join_condition` varchar(1000) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- target_analytics.migration_source_tables definition
+
+CREATE TABLE `migration_source_tables` (
+  `migration_id` bigint DEFAULT NULL,
+  `table_alias` varchar(50) DEFAULT NULL,
+  `source_schema` varchar(100) DEFAULT NULL,
+  `source_table` varchar(200) DEFAULT NULL,
+  `join_order` int DEFAULT NULL,
+  `filter` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+

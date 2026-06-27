@@ -127,9 +127,15 @@ def main():
                 src["source_table"]
             )
 
-            source_dfs[alias] = df
-            df = df.filter(df['deleted'] == False)
             df.show()
+            
+            source_dfs[alias] = df
+            #disable this first.
+            #df = df.filter(df['deleted'] == False)
+            print("%%%%%%%%%%%%%%%%%%%%%%%")
+            if src['filter'] :
+                df = df.filter(src['filter'])
+            
             
             
 
@@ -193,6 +199,8 @@ def main():
                         expr(source_expr).alias(target_column)
                     )
 
+        print(target_columns)
+        
         final_df = result_df.select(*target_columns)
 
 
