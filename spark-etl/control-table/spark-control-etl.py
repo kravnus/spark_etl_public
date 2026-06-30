@@ -29,6 +29,7 @@ src_properties = {
 
 # Define connection properties
 sql_common_url = "jdbc:sqlserver://localhost:1433;databaseName=mStudioCommon;encrypt=true;trustServerCertificate=true;"
+sql_generic_url = "jdbc:sqlserver://localhost:1433;databaseName={generic};encrypt=true;trustServerCertificate=true;"
 src_common_properties = {
     "user": "sa",
     "password": "StrongP@ssword",
@@ -122,10 +123,12 @@ def main():
             # ----------------------------------------------------
             # Define connection properties for the target database
 
-            df = load_sql_source_table(
-                src["source_schema"],
-                src["source_table"]
-            )
+            # df = load_sql_source_table(
+                # src["source_schema"],
+                # src["source_table"]
+            # )
+
+            df = load_sql_generic_source_table(src["source_schema"],src["source_schema"], src["source_table"])
 
             df.show()
             
@@ -254,6 +257,16 @@ def load_sql_source_table(schema_name, table_name):
         properties=src_common_properties
     )
 
+def load_sql_generic_source_table(generic,schema_name, table_name):
+    
+    sql_generic_url = f"jdbc:sqlserver://localhost:1433;databaseName={generic};encrypt=true;trustServerCertificate=true;"
+    print(f"{sql_generic_url}")
+
+    return spark.read.jdbc(
+        url=f"{sql_generic_url}",
+        table=f"{schema_name}.{table_name}",
+        properties=src_common_properties
+    )
 
 
 if __name__ == "__main__":
