@@ -4,4 +4,7 @@ INSERT INTO target_analytics.migration_source_tables (migration_id,table_alias,s
 	 (2,'ad','dbo','address',3,NULL),
 	 (200,'b','mStudioCommon','dbo.banks',1,'deleted == False'),
 	 (300,'d','mStudioCommon','dbo.PODepartments',1,NULL),
-	 (400,'m','mStudioCommon','dbo.MediaTypes',1,'deleted == False');
+	 (400,'m','mStudioCommon','dbo.MediaTypes',1,'deleted == False'),
+	 (100,'u','mStudioBilling','dbo.MI_Common_Users',1,'deleted == False'),
+	 (110,'u','mVStudio','dbo.MI_Common_Users',1,'deleted == False'),
+	 (120,'u','mStudioPortal','dbo.MI_Common_Users',1,'deleted == False');

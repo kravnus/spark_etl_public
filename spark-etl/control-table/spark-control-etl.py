@@ -139,6 +139,7 @@ def main():
             if src['filter'] :
                 df = df.filter(src['filter'])
             
+            source_dfs[alias] = df
             
             
 
@@ -209,9 +210,10 @@ def main():
 
 
         print("final_df")
-        final_df.show()
+        final_df.show(n=df.count(), truncate=False)
         print(target_url)
         print(target_table)
+        print(target_properties)
         final_df.write \
                 .jdbc(
                     url=target_url,
@@ -250,12 +252,12 @@ def load_source_table(schema_name, table_name):
         properties=src_properties
     )
 
-def load_sql_source_table(schema_name, table_name):
-    return spark.read.jdbc(
-        url=sql_common_url,
-        table=f"{schema_name}.{table_name}",
-        properties=src_common_properties
-    )
+# def load_sql_source_table(schema_name, table_name):
+    # return spark.read.jdbc(
+        # url=sql_common_url,
+        # table=f"{schema_name}.{table_name}",
+        # properties=src_common_properties
+    # )
 
 def load_sql_generic_source_table(generic,schema_name, table_name):
     
