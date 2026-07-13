@@ -48,17 +48,22 @@ def main():
     spark.sparkContext.setLogLevel("INFO")  
 
     # ----------------------------------------------------
-    # 2. EXTRACT (Read data from Source Database - PostgreSQL)
+    # 2. EXTRACT (Read data from Source Database - SQL Server)
     # ----------------------------------------------------
-    # Define connection properties for the source database
-    src_url = f"jdbc:postgresql://{_env('POSTGRES_HOST', 'localhost')}:{_env('POSTGRES_PORT', '5432')}/{_env('POSTGRES_DATABASE', 'warehouse_db')}"
+    source_database = _env("SQLSERVER_SOURCE_DATABASE", "source_warehouse")
+    src_url = (
+        f"jdbc:sqlserver://{_env('SQLSERVER_HOST', 'localhost')}:{_env('SQLSERVER_PORT', '1433')}"
+        f";databaseName={source_database}"
+        f";encrypt={_env('SQLSERVER_ENCRYPT', 'true')}"
+        f";trustServerCertificate={_env('SQLSERVER_TRUST_SERVER_CERTIFICATE', 'true')};"
+    )
     src_properties = {
-        "user": _env("POSTGRES_USER", "postgres"),
-        "password": _env("POSTGRES_PASSWORD", "mysecretpassword"),
-        "driver": "org.postgresql.Driver",
+        "user": _env("SQLSERVER_USER", "sa"),
+        "password": _env("SQLSERVER_PASSWORD", "P@ssw0rd"),
+        "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
     }
     
-    print(">>> Extracting data from PostgreSQL source table...")
+    print(">>> Extracting data from SQL Server source table...")
     # Load raw data from a source table into a Spark DataFrame
     raw_users_df = spark.read.jdbc(
         url=src_url, 

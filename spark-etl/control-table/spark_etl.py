@@ -1,5 +1,35 @@
+import os
+from pathlib import Path
+import sys
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, when, initcap, current_timestamp
+
+
+ROOT_DIR = Path(__file__).resolve().parents[1]
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+
+def _load_env_file() -> None:
+    env_file = ROOT_DIR / ".env"
+    if not env_file.exists():
+        return
+
+    with env_file.open("r", encoding="utf-8") as handle:
+        for raw_line in handle:
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            os.environ.setdefault(key.strip(), value.strip().strip("'").strip('"'))
+
+
+_load_env_file()
+
+
+def _env(name: str, default: str) -> str:
+    return os.getenv(name, default)
 
 def main():
     
@@ -18,17 +48,22 @@ def main():
     spark.sparkContext.setLogLevel("INFO")  
 
     # ----------------------------------------------------
-    # 2. EXTRACT (Read data from Source Database - PostgreSQL)
+    # 2. EXTRACT (Read data from Source Database - SQL Server)
     # ----------------------------------------------------
-    # Define connection properties for the source database
-    src_url = "jdbc:postgresql://localhost:5432/warehouse_db"
+    source_database = _env("SQLSERVER_SOURCE_DATABASE", "source_warehouse")
+    src_url = (
+        f"jdbc:sqlserver://{_env('SQLSERVER_HOST', 'localhost')}:{_env('SQLSERVER_PORT', '1433')}"
+        f";databaseName={source_database}"
+        f";encrypt={_env('SQLSERVER_ENCRYPT', 'true')}"
+        f";trustServerCertificate={_env('SQLSERVER_TRUST_SERVER_CERTIFICATE', 'true')};"
+    )
     src_properties = {
-        "user": "postgres",
-        "password": "mysecretpassword",
-        "driver": "org.postgresql.Driver"
+        "user": _env("SQLSERVER_USER", "sa"),
+        "password": _env("SQLSERVER_PASSWORD", "P@ssw0rd"),
+        "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver"
     }
     
-    print(">>> Extracting data from PostgreSQL source table...")
+    print(">>> Extracting data from SQL Server source table...")
     # Load raw data from a source table into a Spark DataFrame
     raw_users_df = spark.read.jdbc(
         url=src_url, 
