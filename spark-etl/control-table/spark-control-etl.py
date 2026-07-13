@@ -1,6 +1,35 @@
+import os
+from pathlib import Path
+import sys
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import expr
 from datetime import datetime
+
+ROOT_DIR = Path(__file__).resolve().parents[1]
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+
+def _load_env_file() -> None:
+    env_file = ROOT_DIR / ".env"
+    if not env_file.exists():
+        return
+
+    with env_file.open("r", encoding="utf-8") as handle:
+        for raw_line in handle:
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            os.environ.setdefault(key.strip(), value.strip().strip("'").strip('"'))
+
+
+_load_env_file()
+
+
+def _env(name: str, default: str) -> str:
+    return os.getenv(name, default)
 
 # ----------------------------------------------------
 # 1. INITIALIZATION (Create Spark Session)
@@ -20,20 +49,23 @@ spark.sparkContext.setLogLevel("ERROR")
 # Define connection properties for the source database
 
 # change this to sql server at the end.
-src_url = "jdbc:postgresql://localhost:5432/warehouse_db"
+src_url = f"jdbc:postgresql://{_env('POSTGRES_HOST', 'localhost')}:{_env('POSTGRES_PORT', '5432')}/{_env('POSTGRES_DATABASE', 'warehouse_db')}"
 src_properties = {
-    "user": "postgres",
-    "password": "mysecretpassword",
-    "driver": "org.postgresql.Driver"
+    "user": _env("POSTGRES_USER", "postgres"),
+    "password": _env("POSTGRES_PASSWORD", "mysecretpassword"),
+    "driver": "org.postgresql.Driver",
 }
 
-# Define connection properties
-sql_common_url = "jdbc:sqlserver://localhost:1433;databaseName=mStudioCommon;encrypt=true;trustServerCertificate=true;"
-sql_generic_url = "jdbc:sqlserver://localhost:1433;databaseName={generic};encrypt=true;trustServerCertificate=true;"
+sql_common_url = (
+    f"jdbc:sqlserver://{_env('SQLSERVER_HOST', 'localhost')}:{_env('SQLSERVER_PORT', '1433')}"
+    f";databaseName={_env('SQLSERVER_COMMON_DATABASE', 'mStudioCommon')}"
+    f";encrypt={_env('SQLSERVER_ENCRYPT', 'true')}"
+    f";trustServerCertificate={_env('SQLSERVER_TRUST_SERVER_CERTIFICATE', 'true')};"
+)
 src_common_properties = {
-    "user": "sa",
-    "password": "StrongP@ssword",
-    "driver":"com.microsoft.sqlserver.jdbc.SQLServerDriver"
+    "user": _env("SQLSERVER_USER", "sa"),
+    "password": _env("SQLSERVER_PASSWORD", "StrongP@ssword"),
+    "driver": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
 }
 
 
@@ -43,11 +75,11 @@ src_common_properties = {
 # ----------------------------------------------------
 # Define connection properties for the target database
 
-target_url = "jdbc:mysql://localhost:3306/target_analytics"
+target_url = f"jdbc:mysql://{_env('MYSQL_HOST', 'localhost')}:{_env('MYSQL_PORT', '3306')}/{_env('MYSQL_DATABASE', 'target_analytics')}"
 target_properties = {
-    "user": "mysql_user",
-    "password": "another_secure_password",
-    "driver": "com.mysql.cj.jdbc.Driver"
+    "user": _env("MYSQL_USER", "mysql_user"),
+    "password": _env("MYSQL_PASSWORD", "another_secure_password"),
+    "driver": "com.mysql.cj.jdbc.Driver",
 }
 
 def main():
@@ -261,7 +293,12 @@ def load_source_table(schema_name, table_name):
 
 def load_sql_generic_source_table(generic,schema_name, table_name):
     
-    sql_generic_url = f"jdbc:sqlserver://localhost:1433;databaseName={generic};encrypt=true;trustServerCertificate=true;"
+    sql_generic_url = (
+        f"jdbc:sqlserver://{_env('SQLSERVER_HOST', 'localhost')}:{_env('SQLSERVER_PORT', '1433')}"
+        f";databaseName={generic}"
+        f";encrypt={_env('SQLSERVER_ENCRYPT', 'true')}"
+        f";trustServerCertificate={_env('SQLSERVER_TRUST_SERVER_CERTIFICATE', 'true')};"
+    )
     print(f"{sql_generic_url}")
 
     return spark.read.jdbc(
