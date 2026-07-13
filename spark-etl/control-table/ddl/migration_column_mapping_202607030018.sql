@@ -16,12 +16,14 @@ INSERT INTO target_analytics.migration_column_mapping (migration_id,source_expre
 	 (200,'0','user_id',NULL,7),
 	 (300,'d.department','name',NULL,1),
 	 (400,'m.name','name',NULL,1),
-	 (100,'u.userfullname','name',NULL,1),
-	 (100,'''''','email','uuid()',2),
+	 (100,'UserFullName','name',NULL,1),
+	 (100,'CleanEmail','email',NULL,2),
 	 (100,'''''','password','''''',3),
-	 (100,'u.username','username','',4);
+	 (100,'UserName','username',NULL,4);
 INSERT INTO target_analytics.migration_column_mapping (migration_id,source_expression,target_column,transformation_expression,sequence_no) VALUES
-	 (100,'u.usercode','legacy_ids','concat(''{"db":"mStudioBilling","id":"'',u.usercode,''"}'')',5),
+	 (100,'UserCode','legacy_ids','concat(''{"db":"'',from_db,''","id":"'',UserCode,''"}'')',5),
+	 (100,'CreatedDate','created_at',NULL,6),
+	 (100,'LastUpdateDate','updated_at',NULL,7),
 	 (110,'u.username','username','',1),
 	 (110,'u.usercode','legacy_ids','concat(''{"db":"mStudioPortal","id":"'',u.usercode,''"}'')',2),
 	 (110,'''''','email','uuid()',3),

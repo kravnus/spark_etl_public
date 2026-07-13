@@ -3,7 +3,8 @@ from pathlib import Path
 import sys
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import expr
+from pyspark.sql.functions import expr, lit, col, row_number, when, regexp_extract, coalesce
+from pyspark.sql.window import Window
 from datetime import datetime
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -49,12 +50,12 @@ spark.sparkContext.setLogLevel("ERROR")
 # Define connection properties for the source database
 
 # change this to sql server at the end.
-src_url = f"jdbc:postgresql://{_env('POSTGRES_HOST', 'localhost')}:{_env('POSTGRES_PORT', '5432')}/{_env('POSTGRES_DATABASE', 'warehouse_db')}"
-src_properties = {
-    "user": _env("POSTGRES_USER", "postgres"),
-    "password": _env("POSTGRES_PASSWORD", "mysecretpassword"),
-    "driver": "org.postgresql.Driver",
-}
+# src_url = f"jdbc:postgresql://{_env('POSTGRES_HOST', 'localhost')}:{_env('POSTGRES_PORT', '5432')}/{_env('POSTGRES_DATABASE', 'warehouse_db')}"
+# src_properties = {
+#     "user": _env("POSTGRES_USER", "postgres"),
+#     "password": _env("POSTGRES_PASSWORD", "mysecretpassword"),
+#     "driver": "org.postgresql.Driver",
+# }
 
 sql_common_url = (
     f"jdbc:sqlserver://{_env('SQLSERVER_HOST', 'localhost')}:{_env('SQLSERVER_PORT', '1433')}"
@@ -85,9 +86,9 @@ target_properties = {
 def main():
 
     
-    print(">>> Extracting data from PostgreSQL source table...")
-    # Load raw data from a source table into a Spark DataFrame
-    raw_users_df = load_source_table("source_warehouse", "raw_customer");
+    # print(">>> Extracting data from PostgreSQL source table...")
+    # # Load raw data from a source table into a Spark DataFrame
+    # raw_users_df = load_source_table("source_warehouse", "raw_customer");
 #    raw_users_df.show()
 
 
@@ -160,7 +161,7 @@ def main():
                 # src["source_table"]
             # )
 
-            df = load_sql_generic_source_table(src["source_schema"],src["source_schema"], src["source_table"])
+            df = load_sql_generic_source_table(src["source_schema"], src["source_table"])
 
             df.show()
             
@@ -175,25 +176,30 @@ def main():
             
             
 
-        root_alias = sources[0]["table_alias"]
-        result_df = source_dfs[root_alias].alias(root_alias)
-
         join_rows = joins_cfg \
                 .filter(
                     joins_cfg.migration_id == migration_id
                 ) \
                 .collect()
 
-        #for each join configuration
-        for join_cfg in join_rows:
+        # Union mode: multiple sources with no join config → union + dedup in Spark
+        # (avoids needing a SQL Server cross-database view)
+        if len(sources) > 1 and not join_rows:
+            result_df = _union_and_dedup(source_dfs, sources)
+        else:
+            root_alias = sources[0]["table_alias"]
+            result_df = source_dfs[root_alias].alias(root_alias)
 
-                right_alias = join_cfg["right_alias"]
+            #for each join configuration
+            for join_cfg in join_rows:
 
-                result_df = result_df.join(
-                    source_dfs[right_alias].alias(right_alias),
-                    expr(join_cfg["join_condition"]),
-                    join_cfg["join_type"].lower()
-                )
+                    right_alias = join_cfg["right_alias"]
+
+                    result_df = result_df.join(
+                        source_dfs[right_alias].alias(right_alias),
+                        expr(join_cfg["join_condition"]),
+                        join_cfg["join_type"].lower()
+                    )
         
         #used for incremental loading.
         if load_type == "INCREMENTAL":
@@ -239,14 +245,16 @@ def main():
         
         final_df = result_df.select(*target_columns)
 
-
+        # Sort by created_at ASC so MySQL auto-increment id reflects chronological order
+        if "created_at" in final_df.columns:
+            final_df = final_df.orderBy(col("created_at").asc())
 
         print("final_df")
         final_df.show(n=df.count(), truncate=False)
         print(target_url)
         print(target_table)
         print(target_properties)
-        final_df.write \
+        final_df.coalesce(1).write \
                 .jdbc(
                     url=target_url,
                     table=target_table,
@@ -269,6 +277,72 @@ def main():
     
     
 
+def _union_and_dedup(source_dfs, sources):
+    """
+    Union multiple DataFrames (same base table, different databases) in Spark.
+    Adds a 'from_db' column using each source's table_alias, then deduplicates
+    by UserName — keeping the row with the latest CreatedDate and lowest join_order.
+
+    This replaces the need for a cross-database SQL Server view (vw_common_users_final).
+    """
+    frames = []
+    for src in sources:
+        alias = src["table_alias"]
+        df = source_dfs[alias]
+
+        # Normalize portal schema to match billing/vstudio:
+        # - portal has 'FullName' but billing/vstudio have 'UserFullName'
+        # - portal has 'Email' column (real email address)
+        if src["source_schema"] == "mStudioPortal":
+            if "FullName" in df.columns and "UserFullName" not in df.columns:
+                df = df.withColumnRenamed("FullName", "UserFullName")
+
+        # Priority matches original SQL view: mVStudio=1, mStudioBilling=2, mStudioPortal=3
+        _db_priority = {"mVStudio": 1, "mStudioBilling": 2, "mStudioPortal": 3}
+        db_prio = _db_priority.get(src["source_schema"], int(src["join_order"]))
+        df = (df
+              .withColumn("from_db", lit(src["source_schema"]))
+              .withColumn("_priority", lit(db_prio)))
+        frames.append(df)
+
+    # Union all, filling missing columns with null where schemas differ
+    combined = frames[0]
+    for df in frames[1:]:
+        combined = combined.unionByName(df, allowMissingColumns=True)
+
+    # Compute CleanEmail (mirrors the SQL view logic):
+    # 1. UserName if it looks like an email (portal users often use email as username)
+    # 2. First email-like token found in Description
+    # 3. Email column (only portal rows have it; billing/vstudio are null after union)
+    # 4. Falls back to uuid() in the column mapping
+    _email_re = r'[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}'
+    combined = combined.withColumn(
+        "CleanEmail",
+        coalesce(
+            when(col("UserName").rlike(r'.+@.+\..+'), col("UserName")),
+            when(regexp_extract(col("Description"), _email_re, 0) != "",
+                 regexp_extract(col("Description"), _email_re, 0)),
+            # Treat empty string Email as null so uuid() fallback kicks in
+            when(col("Email").isNotNull() & (col("Email") != ""), col("Email")),
+        )
+    )
+
+    # Dedup: one row per UserName, LATEST CreatedDate wins (matches SQL view ORDER BY CreatedDate DESC)
+    # Tie-break by DB priority: mVStudio=1, mStudioBilling=2, mStudioPortal=3
+    window = Window.partitionBy("UserName").orderBy(
+        col("CreatedDate").desc(),
+        col("_priority").asc()
+    )
+
+    deduped = (combined
+               .withColumn("_rn", row_number().over(window))
+               .filter(col("_rn") == 1)
+               .drop("_rn", "_priority"))
+
+    print(f">>> Union+dedup complete. Sources: {[s['table_alias'] for s in sources]}")
+    return deduped
+
+
 def load_control_table(table_name):
     return spark.read.jdbc(
         url=target_url,
@@ -277,12 +351,12 @@ def load_control_table(table_name):
     )
 
 
-def load_source_table(schema_name, table_name):
-    return spark.read.jdbc(
-        url=src_url,
-        table=f"{schema_name}.{table_name}",
-        properties=src_properties
-    )
+# def load_source_table(schema_name, table_name):
+#     return spark.read.jdbc(
+#         url=src_url,
+#         table=f"{schema_name}.{table_name}",
+#         properties=src_properties
+#     )
 
 # def load_sql_source_table(schema_name, table_name):
     # return spark.read.jdbc(
@@ -291,22 +365,16 @@ def load_source_table(schema_name, table_name):
         # properties=src_common_properties
     # )
 
-def load_sql_generic_source_table(generic,schema_name, table_name):
-    
+def load_sql_generic_source_table(database_name, table_name):
     sql_generic_url = (
         f"jdbc:sqlserver://{_env('SQLSERVER_HOST', 'localhost')}:{_env('SQLSERVER_PORT', '1433')}"
-        f";databaseName={generic}"
+        f";databaseName={database_name}"
         f";encrypt={_env('SQLSERVER_ENCRYPT', 'true')}"
         f";trustServerCertificate={_env('SQLSERVER_TRUST_SERVER_CERTIFICATE', 'true')};"
     )
-    print(f"{sql_generic_url}")
-
     return spark.read.jdbc(
-        url=f"{sql_generic_url}",
-        table=f"{schema_name}.{table_name}",
-        properties=src_common_properties
+        url=sql_generic_url, table=table_name, properties=src_common_properties
     )
-
 
 if __name__ == "__main__":
     main()

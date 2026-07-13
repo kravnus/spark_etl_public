@@ -95,7 +95,18 @@ sed 's/target_analytics\.//g' control-table/ddl/migration_column_mapping_2026070
 | MYSQL_PWD="$MYSQL_PASSWORD" mysql -u "$MYSQL_USER" -h "$MYSQL_HOST" -P "$MYSQL_PORT" "$MYSQL_DATABASE"
 
 #########################################
-# 7. Run Spark ETL
+# 7. Drop email unique constraint (allow duplicate/empty emails during ETL)
+#########################################
+
+echo "Dropping email unique constraint and NOT NULL requirement..."
+
+MYSQL_PWD="$MYSQL_PASSWORD" mysql -u "$MYSQL_USER" -h "$MYSQL_HOST" -P "$MYSQL_PORT" "$MYSQL_DATABASE" <<EOF
+ALTER TABLE users DROP INDEX users_email_unique;
+ALTER TABLE users MODIFY COLUMN email VARCHAR(255) NULL;
+EOF
+
+#########################################
+# 8. Run Spark ETL
 #########################################
 
 echo "Running Spark ETL..."
@@ -103,6 +114,16 @@ echo "Running Spark ETL..."
 spark-submit \
   --packages com.mysql:mysql-connector-j:8.3.0,com.microsoft.sqlserver:mssql-jdbc:12.6.1.jre11 \
   control-table/spark-control-etl.py
+
+#########################################
+# 9. Re-add email unique constraint
+#########################################
+
+echo "Re-adding email unique constraint (column stays nullable to allow legacy users with no email)..."
+
+MYSQL_PWD="$MYSQL_PASSWORD" mysql -u "$MYSQL_USER" -h "$MYSQL_HOST" -P "$MYSQL_PORT" "$MYSQL_DATABASE" <<EOF
+ALTER TABLE users ADD UNIQUE INDEX users_email_unique (email);
+EOF
 
 echo ""
 echo "========================================="
