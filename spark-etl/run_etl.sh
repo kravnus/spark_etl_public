@@ -48,20 +48,7 @@ cd "$BACKEND_DIR" || exit
 php artisan migrate --seed
 
 #########################################
-# 3. Add legacy_ids column
-#########################################
-
-echo "Adding legacy_ids column..."
-
-MYSQL_PWD="$MYSQL_PASSWORD" mysql -u "$MYSQL_USER" -h "$MYSQL_HOST" -P "$MYSQL_PORT" "$MYSQL_DATABASE" <<EOF
-
-ALTER TABLE users
-ADD COLUMN legacy_ids JSON NULL AFTER username;
-
-EOF
-
-#########################################
-# 4. Spark ETL Project
+# 3. Spark ETL Project
 #########################################
 
 echo "Moving to Spark ETL project..."
@@ -69,7 +56,7 @@ echo "Moving to Spark ETL project..."
 cd "$SCRIPT_DIR" || exit
 
 #########################################
-# 5. Create Metadata Tables
+# 4. Create Metadata Tables
 #########################################
 
 echo "Creating metadata tables..."
@@ -77,7 +64,7 @@ echo "Creating metadata tables..."
 MYSQL_PWD="$MYSQL_PASSWORD" mysql -u "$MYSQL_USER" -h "$MYSQL_HOST" -P "$MYSQL_PORT" "$MYSQL_DATABASE" < control-table/ddl/ddl
 
 #########################################
-# 6. Seed Metadata
+# 5. Seed Metadata
 #########################################
 
 echo "Importing metadata..."
@@ -95,7 +82,7 @@ sed 's/target_analytics\.//g' control-table/ddl/migration_column_mapping_2026070
 | MYSQL_PWD="$MYSQL_PASSWORD" mysql -u "$MYSQL_USER" -h "$MYSQL_HOST" -P "$MYSQL_PORT" "$MYSQL_DATABASE"
 
 #########################################
-# 7. Drop email unique constraint (allow duplicate/empty emails during ETL)
+# 6. Drop email unique constraint (allow duplicate/empty emails during ETL)
 #########################################
 
 echo "Dropping email unique constraint and NOT NULL requirement..."
@@ -106,7 +93,7 @@ ALTER TABLE users MODIFY COLUMN email VARCHAR(255) NULL;
 EOF
 
 #########################################
-# 8. Run Spark ETL
+# 7. Run Spark ETL
 #########################################
 
 echo "Running Spark ETL..."
@@ -116,10 +103,10 @@ spark-submit \
   control-table/spark-control-etl.py
 
 #########################################
-# 9. Re-add email unique constraint
+# 8. Re-add email unique constraint
 #########################################
 
-echo "Re-adding email unique constraint (column stays nullable to allow legacy users with no email)..."
+echo "Re-adding email unique constraint..."
 
 MYSQL_PWD="$MYSQL_PASSWORD" mysql -u "$MYSQL_USER" -h "$MYSQL_HOST" -P "$MYSQL_PORT" "$MYSQL_DATABASE" <<EOF
 ALTER TABLE users ADD UNIQUE INDEX users_email_unique (email);
