@@ -1,11 +1,4 @@
 INSERT INTO target_analytics.migration_column_mapping (migration_id,source_expression,target_column,transformation_expression,sequence_no) VALUES
-	 (1,'c.customer_id','cust_id',NULL,1),
-	 (1,'c.email','email','UPPER(c.email)',2),
-	 (2,'a.account_no','account_no',NULL,3),
-	 (2,'ad.city','city',NULL,4),
-	 (2,'','migration_ts','current_timestamp()',5),
-	 (1,'c.first_name','first_name',NULL,3),
-	 (1,'c.last_name','last_name',NULL,4),
 	 (200,'BankTxtCode','bank_txt_code',NULL,1),
 	 (200,'BankName','bank_name','trim(BankName)',2),
 	 (200,'BankInitials','bank_initials',NULL,3),
@@ -16,19 +9,13 @@ INSERT INTO target_analytics.migration_column_mapping (migration_id,source_expre
 	 (300,'d.department','name',NULL,1),
 	 (400,'m.name','name',NULL,1),
 	 (100,'UserFullName','name',NULL,1),
-	 (100,'CleanEmail','email',NULL,2),
+	 (100,'CleanEmail','email','COALESCE(CleanEmail, CONCAT(UserCode, ''@legacy.local''))',2),
 	 (100,'''''','password','''''',3),
 	 (100,'UserName','username',NULL,4),
 	 (100,'CreatedDate','created_at',NULL,5),
 	 (100,'LastUpdateDate','updated_at',NULL,6),
 	 (100,'Deleted','deleted_at','CASE WHEN Deleted = true AND DeleteDate IS NOT NULL THEN DeleteDate WHEN Deleted = true AND DeleteDate IS NULL THEN CreatedDate ELSE NULL END',7),
-	 (100,'UserCode','legacy_ids','concat(''{"db":"'',from_db,''","id":"'',UserCode,''"}'')',8);
-INSERT INTO target_analytics.migration_column_mapping (migration_id,source_expression,target_column,transformation_expression,sequence_no) VALUES
-	 (110,'u.username','username','',1),
-	 (110,'u.usercode','legacy_ids','concat(''{"db":"mStudioPortal","id":"'',u.usercode,''"}'')',2),
-	 (110,'''''','email','uuid()',3),
-	 (110,'''''','password','''''',4),
-	 (120,'u.username','username','',1),
-	 (120,'u.usercode','legacy_ids','concat(''{"db":"mStudioPortal","id":"'',u.usercode,''"}'')',2),
-	 (120,'''''','email','uuid()',3),
-	 (120,'''''','password','''''',4);
+	 (100,'ContactNo','phone_no',NULL,8),
+	 (100,'CreatedDate','terms_accepted_at',NULL,9),
+	 (100,'''''','terms_accepted','1',10),
+	 (100,'UserCode','legacy_id','concat(''{"db":"'',from_db,''","UserCode":"'',UserCode,''"}'')',11);

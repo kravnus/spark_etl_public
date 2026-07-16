@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# run using chmod +x run_etl.sh
+# run using:
+# chmod +x run_etl.sh
 # ./run_etl.sh
 
 set -e
@@ -48,49 +49,54 @@ cd "$BACKEND_DIR" || exit
 php artisan migrate --seed
 
 #########################################
-# 3. Spark ETL Project
+# 3. Return to ETL Project
 #########################################
-
-echo "Moving to Spark ETL project..."
 
 cd "$SCRIPT_DIR" || exit
 
 #########################################
-# 4. Create Metadata Tables
+# 4. Import SQL Server Staging Data
+#########################################
+
+echo "Importing SQL Server staging tables..."
+
+sqlcmd \
+  -S localhost \
+  -U sa \
+  -P 'P@ssw0rd' \
+  -i control-table/ddl/finalUsers.sql \
+  -C
+
+#########################################
+# 5. Create Metadata Tables
 #########################################
 
 echo "Creating metadata tables..."
 
-MYSQL_PWD="$MYSQL_PASSWORD" mysql -u "$MYSQL_USER" -h "$MYSQL_HOST" -P "$MYSQL_PORT" "$MYSQL_DATABASE" < control-table/ddl/ddl
+MYSQL_PWD="$MYSQL_PASSWORD" mysql \
+  -u "$MYSQL_USER" \
+  -h "$MYSQL_HOST" \
+  -P "$MYSQL_PORT" \
+  "$MYSQL_DATABASE" \
+  < control-table/ddl/ddl
 
 #########################################
-# 5. Seed Metadata
+# 6. Seed Metadata
 #########################################
 
 echo "Importing metadata..."
 
-sed 's/target_analytics\.//g' control-table/ddl/migration_control_202607030018.sql \
+sed 's/target_analytics/arms/g' control-table/ddl/migration_control_202607030018.sql \
 | MYSQL_PWD="$MYSQL_PASSWORD" mysql -u "$MYSQL_USER" -h "$MYSQL_HOST" -P "$MYSQL_PORT" "$MYSQL_DATABASE"
 
-sed 's/target_analytics\.//g' control-table/ddl/migration_source_tables_202607030018.sql \
+sed 's/target_analytics/arms/g' control-table/ddl/migration_source_tables_202607030018.sql \
 | MYSQL_PWD="$MYSQL_PASSWORD" mysql -u "$MYSQL_USER" -h "$MYSQL_HOST" -P "$MYSQL_PORT" "$MYSQL_DATABASE"
 
-sed 's/target_analytics\.//g' control-table/ddl/migration_joins_202607030018.sql \
+sed 's/target_analytics/arms/g' control-table/ddl/migration_joins_202607030018.sql \
 | MYSQL_PWD="$MYSQL_PASSWORD" mysql -u "$MYSQL_USER" -h "$MYSQL_HOST" -P "$MYSQL_PORT" "$MYSQL_DATABASE"
 
-sed 's/target_analytics\.//g' control-table/ddl/migration_column_mapping_202607030018.sql \
+sed 's/target_analytics/arms/g' control-table/ddl/migration_column_mapping_202607030018.sql \
 | MYSQL_PWD="$MYSQL_PASSWORD" mysql -u "$MYSQL_USER" -h "$MYSQL_HOST" -P "$MYSQL_PORT" "$MYSQL_DATABASE"
-
-#########################################
-# 6. Drop email unique constraint (allow duplicate/empty emails during ETL)
-#########################################
-
-echo "Dropping email unique constraint and NOT NULL requirement..."
-
-MYSQL_PWD="$MYSQL_PASSWORD" mysql -u "$MYSQL_USER" -h "$MYSQL_HOST" -P "$MYSQL_PORT" "$MYSQL_DATABASE" <<EOF
-ALTER TABLE users DROP INDEX users_email_unique;
-ALTER TABLE users MODIFY COLUMN email VARCHAR(255) NULL;
-EOF
 
 #########################################
 # 7. Run Spark ETL
@@ -102,17 +108,7 @@ spark-submit \
   --packages com.mysql:mysql-connector-j:8.3.0,com.microsoft.sqlserver:mssql-jdbc:12.6.1.jre11 \
   control-table/spark-control-etl.py
 
-#########################################
-# 8. Re-add email unique constraint
-#########################################
-
-echo "Re-adding email unique constraint..."
-
-MYSQL_PWD="$MYSQL_PASSWORD" mysql -u "$MYSQL_USER" -h "$MYSQL_HOST" -P "$MYSQL_PORT" "$MYSQL_DATABASE" <<EOF
-ALTER TABLE users ADD UNIQUE INDEX users_email_unique (email);
-EOF
-
 echo ""
 echo "========================================="
-echo " ETL Completed"
+echo " ETL Completed Successfully"
 echo "========================================="
