@@ -204,7 +204,7 @@ CREATE TABLE `ad_package_documents` (
   PRIMARY KEY (`id`),
   KEY `idx_package_signed_check` (`ad_package_id`,`document_type`,`document_name`(50)),
   CONSTRAINT `ad_package_documents_ad_package_id_foreign` FOREIGN KEY (`ad_package_id`) REFERENCES `ad_packages` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -224,7 +224,7 @@ CREATE TABLE `ad_package_items` (
   PRIMARY KEY (`id`),
   KEY `ad_package_items_ad_package_id_foreign` (`ad_package_id`),
   CONSTRAINT `ad_package_items_ad_package_id_foreign` FOREIGN KEY (`ad_package_id`) REFERENCES `ad_packages` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -246,7 +246,7 @@ CREATE TABLE `ad_package_payments` (
   PRIMARY KEY (`id`),
   KEY `ad_package_payments_ad_package_id_foreign` (`ad_package_id`),
   CONSTRAINT `ad_package_payments_ad_package_id_foreign` FOREIGN KEY (`ad_package_id`) REFERENCES `ad_packages` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -273,7 +273,7 @@ CREATE TABLE `ad_package_receipts` (
   KEY `ad_package_receipts_ad_package_id_foreign` (`ad_package_id`),
   CONSTRAINT `ad_package_receipts_ad_package_id_foreign` FOREIGN KEY (`ad_package_id`) REFERENCES `ad_packages` (`id`) ON DELETE CASCADE,
   CONSTRAINT `ad_package_receipts_ad_package_payment_id_foreign` FOREIGN KEY (`ad_package_payment_id`) REFERENCES `ad_package_payments` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -479,7 +479,7 @@ CREATE TABLE `ad_packages` (
   CONSTRAINT `ad_packages_media_id_foreign` FOREIGN KEY (`media_id`) REFERENCES `media_type` (`id`) ON DELETE RESTRICT,
   CONSTRAINT `ad_packages_payment_proof_verified_by_foreign` FOREIGN KEY (`payment_proof_verified_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
   CONSTRAINT `ad_packages_preparer_id_foreign` FOREIGN KEY (`preparer_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -509,7 +509,7 @@ CREATE TABLE `agency_profiles` (
   UNIQUE KEY `agency_profiles_no_pendaftaran_perniagaan_unique` (`no_pendaftaran_perniagaan`),
   KEY `agency_profiles_user_id_foreign` (`user_id`),
   CONSTRAINT `agency_profiles_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -637,7 +637,7 @@ CREATE TABLE `billboard_applications` (
   PRIMARY KEY (`id`),
   KEY `billboard_applications_application_id_foreign` (`application_id`),
   CONSTRAINT `billboard_applications_application_id_foreign` FOREIGN KEY (`application_id`) REFERENCES `material_applications` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -760,7 +760,7 @@ CREATE TABLE `company_profiles` (
   UNIQUE KEY `company_profiles_no_pendaftaran_perniagaan_unique` (`no_pendaftaran_perniagaan`),
   KEY `company_profiles_user_id_foreign` (`user_id`),
   CONSTRAINT `company_profiles_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1005,7 +1005,7 @@ CREATE TABLE `departments` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1154,7 +1154,7 @@ CREATE TABLE `government_profiles` (
   UNIQUE KEY `government_profiles_ptj_no_unique` (`ptj_no`),
   KEY `government_profiles_user_id_foreign` (`user_id`),
   CONSTRAINT `government_profiles_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1179,7 +1179,7 @@ CREATE TABLE `individual_profiles` (
   UNIQUE KEY `individual_profiles_ic_no_unique` (`ic_no`),
   KEY `individual_profiles_user_id_foreign` (`user_id`),
   CONSTRAINT `individual_profiles_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1479,7 +1479,7 @@ CREATE TABLE `material_applications` (
   CONSTRAINT `material_applications_package_id_foreign` FOREIGN KEY (`package_id`) REFERENCES `ad_packages` (`id`) ON DELETE SET NULL,
   CONSTRAINT `material_applications_reviewed_by_foreign` FOREIGN KEY (`reviewed_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
   CONSTRAINT `material_applications_source_application_id_foreign` FOREIGN KEY (`source_application_id`) REFERENCES `material_applications` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1563,7 +1563,7 @@ CREATE TABLE `media` (
   UNIQUE KEY `media_uuid_unique` (`uuid`),
   KEY `media_model_type_model_id_index` (`model_type`,`model_id`),
   KEY `media_order_column_index` (`order_column`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1579,7 +1579,7 @@ CREATE TABLE `media_type` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1704,7 +1704,7 @@ CREATE TABLE `penalty` (
   KEY `penalty_status_index` (`status`),
   CONSTRAINT `penalty_invoice_id_foreign` FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`) ON DELETE CASCADE,
   CONSTRAINT `penalty_waived_by_foreign` FOREIGN KEY (`waived_by`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1823,7 +1823,7 @@ CREATE TABLE `proforma_invoice` (
   CONSTRAINT `proforma_invoice_media_type_id_foreign` FOREIGN KEY (`media_type_id`) REFERENCES `media_type` (`id`) ON DELETE RESTRICT,
   CONSTRAINT `proforma_invoice_package_id_foreign` FOREIGN KEY (`package_id`) REFERENCES `ad_packages` (`id`) ON DELETE CASCADE,
   CONSTRAINT `proforma_invoice_submitted_by_foreign` FOREIGN KEY (`submitted_by`) REFERENCES `users` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1917,7 +1917,7 @@ CREATE TABLE `radio_applications` (
   PRIMARY KEY (`id`),
   KEY `radio_applications_application_id_foreign` (`application_id`),
   CONSTRAINT `radio_applications_application_id_foreign` FOREIGN KEY (`application_id`) REFERENCES `material_applications` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2164,7 +2164,7 @@ CREATE TABLE `tv_applications` (
   PRIMARY KEY (`id`),
   KEY `tv_applications_application_id_foreign` (`application_id`),
   CONSTRAINT `tv_applications_application_id_foreign` FOREIGN KEY (`application_id`) REFERENCES `material_applications` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2224,7 +2224,7 @@ CREATE TABLE `users` (
   `profile_id` bigint unsigned DEFAULT NULL,
   `profile_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phone_no` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
@@ -2242,7 +2242,7 @@ CREATE TABLE `users` (
   KEY `users_email_index` (`email`),
   KEY `users_profile_type_profile_id_index` (`profile_type`,`profile_id`),
   KEY `users_username_index` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2261,4 +2261,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-07-15 12:11:11
+-- Dump completed on 2026-07-16 17:28:19
